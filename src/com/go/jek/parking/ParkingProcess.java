@@ -1,5 +1,8 @@
 package com.go.jek.parking;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.go.jek.parking.enums.RequestType;
@@ -20,14 +23,27 @@ public class ParkingProcess {
 		if (args == null || args.length == 0) {
 			parkingProcess.startInteractiveProcess();
 
+		} else {
+			String filepath = args[0];
+			parkingProcess.processFile(new File(filepath));
 		}
 
-		RequestType requestType = RequestType.get(args[0]);
+	}
 
-		if (requestType == null) {
-			System.out.println("The input request type " + args[0] + " is not in the list of applicable request types");
+	private void processFile(File file) {
+
+		List<String> lines = new ArrayList<String>();
+		for (String line : lines) {
+			String vals[] = line.split(",");
+			RequestType requestType = RequestType.get(vals[0]);
+
+			if (requestType == null) {
+				System.out.println(
+						"The input request type " + vals[0] + " is not in the list of applicable request types");
+			}
+
+			processLine(line);
 		}
-
 	}
 
 	private void startInteractiveProcess() {
@@ -37,16 +53,19 @@ public class ParkingProcess {
 
 		String line = scanner.nextLine();
 		while (true) {
-			if (line == null || line.isEmpty() || line.equals("EXIT")) {
-				System.out.println("Stopping the process.");
-				scanner.close();
+			if (line != null && !line.isEmpty()) {
+				if (line.equals("EXIT")) {
+					System.out.println("Stopping the process.");
+					scanner.close();
 
-				return;
+					return;
+				}
+
+				processLine(line);
+
 			}
-
-			processLine(line);
-
 			line = scanner.nextLine();
+
 		}
 
 	}
