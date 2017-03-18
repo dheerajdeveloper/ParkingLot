@@ -27,6 +27,8 @@ public class ParkingProcess {
 
 		} else {
 			String filepath = args[0];
+			
+			System.out.println("The file path is " +  filepath);
 			parkingProcess.processFile(new File(filepath));
 		}
 
